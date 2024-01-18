@@ -2,54 +2,49 @@ package com.quiz.quiz.controllers;
 
 
 import com.quiz.quiz.models.Quiz;
-import com.quiz.quiz.repositories.QuizRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+
+import com.quiz.quiz.services.QuizService;
+
+
 @RestController
 @RequestMapping("/quizzes")
 public class QuizController {
-
-    private final QuizRepository quizRepository;
+    private final QuizService quizService;
 
     @Autowired
-    public QuizController(QuizRepository quizService) {
-        this.quizRepository = quizService;
+    public QuizController(QuizService quizService) {
+        this.quizService = quizService;
     }
 
-    // http://localhost:8093/quizzes
+    // http://localhost:3000/quizzes/
     @GetMapping("/")
     public List<Quiz> getAllQuizzes() {
-        return quizRepository.findAll();
+        return quizService.getAllQuizzes();
     }
 
-    // http://localhost:8093/quizzes/:id
-    @GetMapping("/{id}")
-    public Quiz getQuizById(@PathVariable String id) {
-        return quizRepository.findById(id).orElse(null);
+    // http://localhost:3000/quizzes/:id
+    @GetMapping("/{quizId}")
+    public ResponseEntity<Quiz> getQuizById(@PathVariable String quizId) {
+        Quiz quiz = quizService.getQuizById(quizId);
+        if (quiz != null) {
+            return ResponseEntity.ok(quiz);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
-    // http://localhost:8093/quizzes/create
+    // http://localhost:3000/quizzes/create
     @PostMapping("/create")
     public Quiz createQuiz(@RequestBody Quiz quiz) {
-        return quizRepository.save(quiz);
+        return quizService.createQuiz(quiz);
     }
 
-
-    // http://localhost:8093/quizzes/:id
-    @PutMapping("/{id}")
-    public Quiz updateQuiz(@PathVariable String id, @RequestBody Quiz updatedQuiz) {
-        updatedQuiz.setId(id);
-        return quizRepository.save(updatedQuiz);
-    }
-
-
-    // http://localhost:8093/quizzes/:id
-    @DeleteMapping("/{id}")
-    public void deleteQuiz(@PathVariable String id) {
-        quizRepository.deleteById(id);
-    }
+    // Add other controller methods as needed
 }
-

@@ -2,31 +2,35 @@ package com.quiz.quiz.models;
 
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.util.List;
+import javax.persistence.*;
+import java.util.List;
 
-@Document(collection = "Attempts")
+@Document
 public class Attempt {
 
     @Id
     private String id;
-    private User student;
-    private Quiz quiz;
+
+    private String studentId;
+    private String quizId;
     private List<Answer> answers;
 
     // Constructors, getters, and setters
 
-    public Attempt() {
-    }
 
-    public Attempt(User student, Quiz quiz, List<Answer> answers) {
-        this.student = student;
-        this.quiz = quiz;
+    public Attempt(String studentId, String quizId, List<Answer> answers) {
+        this.studentId = studentId;
+        this.quizId = quizId;
         this.answers = answers;
     }
 
-    // Other constructors, getters, and setters as needed
+    public Attempt() {
+    }
 
     public String getId() {
         return id;
@@ -36,20 +40,20 @@ public class Attempt {
         this.id = id;
     }
 
-    public User getStudent() {
-        return student;
+    public String getStudentId() {
+        return studentId;
     }
 
-    public void setStudent(User student) {
-        this.student = student;
+    public void setStudentId(String studentId) {
+        this.studentId = studentId;
     }
 
-    public Quiz getQuiz() {
-        return quiz;
+    public String getQuizId() {
+        return quizId;
     }
 
-    public void setQuiz(Quiz quiz) {
-        this.quiz = quiz;
+    public void setQuizId(String quizId) {
+        this.quizId = quizId;
     }
 
     public List<Answer> getAnswers() {
@@ -59,15 +63,4 @@ public class Attempt {
     public void setAnswers(List<Answer> answers) {
         this.answers = answers;
     }
-
-    @Override
-    public String toString() {
-        return "Attempt{" +
-                "id='" + id + '\'' +
-                ", student=" + student +
-                ", quiz=" + quiz +
-                ", answers=" + answers +
-                '}';
-    }
 }
-

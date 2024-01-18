@@ -3,6 +3,7 @@ package com.quiz.quiz.models;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.util.List;
 
@@ -12,13 +13,13 @@ public class Quiz {
     private String id;
     private String title;
     private String professorId;
+
     @DBRef
     private List<Question> questions;
 
+    // Constructors, getters, and setters...
 
-    // Constructors, getters, and setters
     public Quiz() {
-        // Default constructor required by Spring Data MongoDB
     }
 
     public Quiz(String title, String professorId, List<Question> questions) {
@@ -27,7 +28,7 @@ public class Quiz {
         this.questions = questions;
     }
 
-    // Getters and setters...
+    // Other constructors, getters, and setters as needed
 
     public String getId() {
         return id;
@@ -69,5 +70,114 @@ public class Quiz {
                 ", professorId='" + professorId + '\'' +
                 ", questions=" + questions +
                 '}';
+    }
+
+    @Document
+    public static class Question {
+        @Id
+        private String id;
+        private String text;
+
+        @DBRef
+        private List<Option> options;
+
+        // Constructors, getters, and setters...
+
+        public Question() {
+        }
+
+        public Question(String text, List<Option> options) {
+            this.text = text;
+            this.options = options;
+        }
+
+        // Other constructors, getters, and setters as needed
+
+        public String getId() {
+            return id;
+        }
+
+        public void setId(String id) {
+            this.id = id;
+        }
+
+        public String getText() {
+            return text;
+        }
+
+        public void setText(String text) {
+            this.text = text;
+        }
+
+        public List<Option> getOptions() {
+            return options;
+        }
+
+        public void setOptions(List<Option> options) {
+            this.options = options;
+        }
+
+        @Override
+        public String toString() {
+            return "QuizQuestion{" +
+                    "id='" + id + '\'' +
+                    ", text='" + text + '\'' +
+                    ", options=" + options +
+                    '}';
+        }
+
+        @Document
+        public static class Option {
+            @Id
+            private String id;
+            private String text;
+            @Field("isCorrect")
+            private boolean isCorrect;
+
+            // Constructors, getters, and setters...
+
+            public Option() {
+            }
+
+            public Option(String text, boolean isCorrect) {
+                this.text = text;
+                this.isCorrect = isCorrect;
+            }
+
+            // Other constructors, getters, and setters as needed
+
+            public String getId() {
+                return id;
+            }
+
+            public void setId(String id) {
+                this.id = id;
+            }
+
+            public String getText() {
+                return text;
+            }
+
+            public void setText(String text) {
+                this.text = text;
+            }
+
+            public boolean isCorrect() {
+                return isCorrect;
+            }
+
+            public void setCorrect(boolean isCorrect) {
+                this.isCorrect = isCorrect;
+            }
+
+            @Override
+            public String toString() {
+                return "QuizOption{" +
+                        "id='" + id + '\'' +
+                        ", text='" + text + '\'' +
+                        ", isCorrect=" + isCorrect +
+                        '}';
+            }
+        }
     }
 }

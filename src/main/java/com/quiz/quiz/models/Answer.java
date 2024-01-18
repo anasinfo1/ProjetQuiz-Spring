@@ -1,60 +1,47 @@
 package com.quiz.quiz.models;
 
+import javax.persistence.*;
 
-
-import org.springframework.data.annotation.Id;
 
 public class Answer {
 
     @Id
-    private String id;
-
-    private Question question;
-
-    private Option selectedOption;
+    private Long id;
+    private String questionId;
+    private Quiz.Question.Option selectedOption;
 
     // Constructors, getters, and setters
+
+    public Answer(String questionId, Quiz.Question.Option selectedOption) {
+        this.questionId = questionId;
+        this.selectedOption = selectedOption;
+    }
 
     public Answer() {
     }
 
-    public Answer(Question question, Option selectedOption) {
-        this.question = question;
-        this.selectedOption = selectedOption;
-    }
-
-    // Other constructors, getters, and setters as needed
-
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public Question getQuestion() {
-        return question;
+    public String getQuestionId() {
+        return questionId;
     }
 
-    public void setQuestion(Question question) {
-        this.question = question;
+    public void setQuestionId(String questionId) {
+        this.questionId = questionId;
     }
 
-    public Option getSelectedOption() {
+    public Quiz.Question.Option getSelectedOption() {
         return selectedOption;
     }
 
-    public void setSelectedOption(Option selectedOption) {
+    public void setSelectedOption(Quiz.Question.Option selectedOption) {
         this.selectedOption = selectedOption;
     }
-
-    @Override
-    public String toString() {
-        return "Answer{" +
-                "id='" + id + '\'' +
-                ", question=" + question +
-                ", selectedOption=" + selectedOption +
-                '}';
-    }
 }
+
