@@ -23,8 +23,8 @@ public class QuizController {
         this.quizService = quizService;
     }
 
-    // http://localhost:3000/quizzes/
-    @GetMapping("/")
+    // http://localhost:3000/quizzes
+    @GetMapping()
     public List<Quiz> getAllQuizzes() {
         return quizService.getAllQuizzes();
     }
@@ -35,6 +35,17 @@ public class QuizController {
         Quiz quiz = quizService.getQuizById(quizId);
         if (quiz != null) {
             return ResponseEntity.ok(quiz);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    // http://localhost:3000/quizzes/:id
+    @DeleteMapping("/{quizId}")
+    public ResponseEntity<Object> deleteQuizById(@PathVariable String quizId) {
+        boolean deleted = quizService.deleteQuizById(quizId);
+        if (deleted) {
+            return ResponseEntity.ok().build();
         } else {
             return ResponseEntity.notFound().build();
         }

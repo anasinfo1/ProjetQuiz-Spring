@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/users")
@@ -20,9 +21,22 @@ public class UserController {
         this.userRepository=userRepository;
     }
 
-    @GetMapping("/")
+    // http://localhost:3000/users
+    @GetMapping()
     public List<User> getUsers(){
         return userRepository.findAll();
+    }
+
+    // http://localhost:3000/users/:id
+    @GetMapping("/{id}")
+    public ResponseEntity<Object> getUserById(@PathVariable String id) {
+        Optional<User> userOptional = userRepository.findById(id);
+
+        if (userOptional.isPresent()) {
+            return ResponseEntity.ok(userOptional.get());
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
 
@@ -40,12 +54,34 @@ public class UserController {
         User user = userRepository.findByUsernameAndPassword(loginUser.getUsername(), loginUser.getPassword());
 
         if (user != null) {
-            // Successfully logged in
-            return ResponseEntity.ok(user);
+            // Include the token in the response
+            return ResponseEntity.ok(new AuthResponse(true, user));
         } else {
             // Invalid credentials
-            return ResponseEntity.status(401).body("Invalid username or password");
+            return ResponseEntity.status(401).body(new AuthResponse(false,  null));
         }
+    }
+
+
+
+    // Additional class to represent the response structure
+    private static class AuthResponse {
+        private final boolean success;
+        private final User user;
+
+        public AuthResponse(boolean success, User user) {
+            this.success = success;
+            this.user = user;
+        }
+
+        public boolean isSuccess() {
+            return success;
+        }
+
+        public User getUser() {
+            return user;
+        }
+
     }
 
 

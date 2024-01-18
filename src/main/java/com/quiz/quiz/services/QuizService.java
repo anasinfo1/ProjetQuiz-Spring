@@ -24,6 +24,17 @@ public class QuizService {
         this.optionRepository = optionRepository;
     }
 
+    public boolean deleteQuizById(String quizId) {
+        Optional<Quiz> quizOptional = quizRepository.findById(quizId);
+
+        if (quizOptional.isPresent()) {
+            quizRepository.deleteById(quizId);
+            return true; // Successfully deleted
+        } else {
+            return false; // Quiz not found
+        }
+    }
+
     public List<Quiz> getAllQuizzes() {
         return quizRepository.findAll();
     }
